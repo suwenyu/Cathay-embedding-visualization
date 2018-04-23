@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+        <script src="http://nvd3.org/assets/js/nv.d3.js" charset="utf-8"></script>
+        <script src="timeline.js" charset="utf-8"></script>
+        <script src="d3.legend.js" charset="utf-8"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.6.7/d3-tip.js">     </script>
+        <link rel="stylesheet" type="text/css" href="http://nvd3.org/assets/css/nv.d3.css">
+        <link rel="stylesheet" type="text/css" href="timeline.css">
+        <title>Cathay user Sequence Visualization</title> 
+        <!-- Dynamic Scatterplot -->
+    </head>
+    
+    <!-- CSS (Styling) -->
+    <style type="text/css">
+        /* Format X and Y Axis */
+        .axis path,
+        .axis line {
+        stroke: black;
+        shape-rendering: crispEdges;
+        opacity: 0.2
+        }
+
+        .axis text {
+        font-family: sans-serif;
+        font-size: 11px;
+        }
+        .legend rect {
+        fill:white;
+        stroke:black;
+        opacity:0.8;}
+        body {
+        padding-top: 43px;
+      }
+      .statement_para {
+          font-size: 14pt;
+          line-height: 120%;
+          width: 60%;
+          text-align: justify;
+          text-justify: distribute;
+          margin: 10px auto;
+          margin-bottom: 30px;
+      }
+
+      .row {
+        margin 1%;
+      }
+
+      article {
+        padding: 0 1%;
+        font-size: 18px;
+        line-height: 1.5em;
+      }
+
+      body > .container {
+        width: 941px;
+      }
+
+      @media(min-width: 1200px){
+        body > .container {
+          width: 1171px;
+        }
+      }
+
+      @media (max-width: 979px) and (min-width: 768px) {
+        body > .container {
+          width: 725px;
+        }
+      }
+      svg{
+        width:60%;
+        margin:auto;
+      }
+      svg text {
+        font-size: 16px;
+      }
+
+    </style>
+    <!-- End CSS (Styling) -->
+    
+    <body>
+      <!--   <button onclick="playmoremonth(0,5)">play</button> -->
+
+        <section class="cd-horizontal-timeline">
+    <div class="timeline">
+        <div class="events-wrapper">
+            <div class="events">
+                <ol>
+                    <a onclick="playmoremonth(0);" href="#0" data-date="01/10/2016" class="selected">2016 Oct</a></li>
+                    <a onclick="playmoremonth(1);" href="#0" data-date="01/11/2016">2016 Nov</a>
+                    <a onclick="playmoremonth(2);" href="#0" data-date="01/12/2016">2016 Dec</a>
+                    <a onclick="playmoremonth(3);" href="#0" data-date="01/01/2017">2017 Jan</a>
+                    <a onclick="playmoremonth(4);" href="#0" data-date="01/02/2017">2017 Feb</a>
+                    <a onclick="playmoremonth(5);" href="#0" data-date="01/03/2017">2017 Mar</a>
+                    <a onclick="playmoremonth(6);" href="#0" data-date="01/04/2017">2017 Apr</a>
+                    <!-- <a href="#0" data-date="01/11/2014">01 Nov</a> -->
+                    <!-- <a href="#0" data-date="10/12/2014">10 Dec</a>
+                    <a href="#0" data-date="19/01/2015">29 Jan</a>
+                    <a href="#0" data-date="03/03/2015">3 Mar</a> -->
+                </ol>
+
+                <span class="filling-line" aria-hidden="true"></span>
+            </div> <!-- .events -->
+        </div> <!-- .events-wrapper -->
+            
+        <ul class="cd-timeline-navigation">
+            <a href="#0" class="prev inactive">Prev</a>
+            <a href="#0" class="next">Next</a>
+        </ul> <!-- .cd-timeline-navigation -->
+    </div> <!-- .timeline -->
+    <div class="events-content">
+        <div id="chart"></div>
+    </div>
+</section>
+       <!--  <div id="chart"></div> -->
+        <p></p>
+        <script src="scatter.js"></script>
+    </body>
+</html>
+
+
+<script>
+//     var newdata= randomData(4,2);
+//     // console.log(newdata);
+
+//     nv.addGraph(function() {
+//   var chart = nv.models.scatterChart()
+//                 .showDistX(true)    //showDist, when true, will display those little distribution lines on the axis.
+//                 .showDistY(true)
+//                 .transitionDuration(350)
+//                 .color(d3.scale.category10().range());
+
+//   //Configure how the tooltip looks.
+//   chart.tooltipContent(function(key) {
+//       return '<h3>' + key + '</h3>';
+//   });
+
+//   //Axis settings
+//   chart.xAxis.tickFormat(d3.format('.02f'));
+//   chart.yAxis.tickFormat(d3.format('.02f'));
+
+//   //We want to show shapes other than circles.
+//   chart.scatter.onlyCircles(false);;
+//   d3.json('scatter_test.json', function(json) {
+//     // console.log(json);
+//       var myData = randomData(2,1);
+    
+//     var svg1 = d3.select('#chart1 svg')
+//       .datum(myData)
+//       .transition().duration(500)
+//       .call(chart);
+
+//     step = 2;
+//     console.log(svg1);
+//     svg1.datum(myData)  // Update with new data
+//         .transition()  // Transition from old to new
+//         .duration(1000)  // Length of animation
+//         .ease('linear')
+//         .attr("cx", function(d) {
+//             console.log(d)
+//             return xScale(d.path[step][0]);  // Circle's X
+//         })
+//         .attr("cy", function(d) {  // Circle's Y
+//             return yScale(d.path[step][1]);
+//         })
+//         nv.utils.windowResize(myChart.update);
+//     // stepText.text(getStepLabel(step))
+
+//   });
+
+//   // var myData = randomData(2,1);
+//   // d3.select('#chart1 svg')
+//   //     .datum(myData)
+//   //     .transition().duration(500)
+//   //     .call(chart);
+
+
+
+//   nv.utils.windowResize(chart.update);
+
+//   return chart;
+// });
+
+
+//     function randomData(groups, points) { //# groups,# points per group
+//   var data = [],
+//       shapes = ['circle', 'cross', 'triangle-up', 'triangle-down', 'diamond', 'square'],
+//       random = d3.random.normal();
+
+//   for (i = 0; i < groups; i++) {
+//     data.push({
+//       key: 'Group ' + i,
+//       values: []
+//     });
+
+//     for (j = 0; j < points; j++) {
+//       data[i].values.push({
+//         x: random()
+//       , y: random()
+//       , size: Math.random()   //Configure the size of each scatter point
+//       , shape: (Math.random() > 0.95) ? shapes[j % 6] : "circle"  //Configure the shape of each scatter point.
+//       });
+//     }
+//   }
+
+//   return data;
+// }
+
+
+
+</script>
