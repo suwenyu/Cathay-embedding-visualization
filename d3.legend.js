@@ -42,55 +42,25 @@ d3.legend = function(g) {
             // }
             
             // console.log((d));
-            // if(d.key == "red"){
-            //     d.key = "danger"
-            // }
-            // else if(d.key == "orange"){
-            //     d.key = "warning"
-            // }
-            // else{
-            //     d.key = "safe"
-            // }
-            ;return d.key})
-        .on('click',function (type) {
-            var index = press_opacity.indexOf(type.key)
-            if (index < 0){
-                // console.log(type.key);
-                d3.select(this)
-                    .style("opacity", 0.1);
-                d3.selectAll(".dot")
-                    .filter(function(d) {
-                        console.log(d);
-                        console.log(type)
-                        // console.log(d["condition"] == type.key);
-                        return d["condition"] == type.key;
-                    })
-                    .style("opacity", 0.1)
-                d3.selectAll(".legend-circle")
-                    .filter(function(d){
-                        // console.log(d.key == type.key);
-                        return d.key == type.key;
-                    })
-                    .style("opacity", 0.1)
-                press_opacity.push(type.key);
+            if(d.key == "red"){
+                d.new_key = "danger"
+                // d.key = "danger"
+            }
+            else if(d.key == "orange"){
+                d.new_key = "warning"
+                // d.key = "warning"
             }
             else{
-                d3.select(this)
-                    .style("opacity", 0.7);
-                d3.selectAll(".dot")
-                    .filter(function(d){
-                        return d["condition"] == type.key;
-                    })
-                    .style("opacity", 0.7);
-                d3.selectAll(".legend-circle")
-                    .filter(function(d){
-                        return d.key == type.key;
-                    })
-                    .style("opacity", 0.7)
-                press_opacity.splice(index, 1);
+                d.new_key = "safe"
+                // d.key = "safe"
             }
-            // console.log(press_opacity);
-        })
+            
+            ;return d.new_key})
+        // .on('click',function (type) {
+        //     var index = press_opacity.indexOf(type.key)
+            
+        //     // console.log(press_opacity);
+        // })
     
     li.selectAll("circle")
         .data(items,function(d) { return d.key})
@@ -100,44 +70,44 @@ d3.legend = function(g) {
         .attr("cx",0)
         .attr("r","0.4em")
         .style("fill",function(d) { return d.value.condition})
-        .on('click',function (type) {
-            var index = press_opacity.indexOf(type.key)
-            if (index < 0){
-                // console.log(type.key);
-                d3.select(this)
-                    .style("opacity", 0.1);
-                d3.selectAll(".dot")
-                    .filter(function(d) {
-                        // console.log(d);
-                        // console.log(d["condition"] == type.key);
-                        return d["condition"] == type.key;
-                    })
-                    .style("opacity", 0.1)
-                d3.selectAll(".legend-text")
-                    .filter(function(d){
-                        // console.log(d.key == type.key);
-                        return d.key == type.key;
-                    })
-                    .style("opacity", 0.1)
-                press_opacity.push(type.key);
-            }
-            else{
-                d3.select(this)
-                    .style("opacity", 0.7);
-                d3.selectAll(".dot")
-                    .filter(function(d){
-                        return d["condition"] == type.key;
-                    })
-                    .style("opacity", 0.7);
-                d3.selectAll(".legend-text")
-                    .filter(function(d){
-                        return d.key == type.key;
-                    })
-                    .style("opacity", 0.7)
-                press_opacity.splice(index, 1);
-            }
-            // console.log(press_opacity);
-        })
+        // .on('click',function (type) {
+        //     var index = press_opacity.indexOf(type.key)
+        //     if (index < 0){
+        //         // console.log(type.key);
+        //         d3.select(this)
+        //             .style("opacity", 0.1);
+        //         d3.selectAll(".dot")
+        //             .filter(function(d) {
+        //                 // console.log(d);
+        //                 // console.log(d["condition"] == type.key);
+        //                 return d["condition"] == type.key;
+        //             })
+        //             .style("opacity", 0.1)
+        //         d3.selectAll(".legend-text")
+        //             .filter(function(d){
+        //                 // console.log(d.key == type.key);
+        //                 return d.key == type.key;
+        //             })
+        //             .style("opacity", 0.1)
+        //         press_opacity.push(type.key);
+        //     }
+        //     else{
+        //         d3.select(this)
+        //             .style("opacity", 0.7);
+        //         d3.selectAll(".dot")
+        //             .filter(function(d){
+        //                 return d["condition"] == type.key;
+        //             })
+        //             .style("opacity", 0.7);
+        //         d3.selectAll(".legend-text")
+        //             .filter(function(d){
+        //                 return d.key == type.key;
+        //             })
+        //             .style("opacity", 0.7)
+        //         press_opacity.splice(index, 1);
+        //     }
+        //     // console.log(press_opacity);
+        // })
   })
   return g
 }

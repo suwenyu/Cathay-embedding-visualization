@@ -37,6 +37,8 @@ var canvas_width = 600;
 var canvas_height = 400;
 var padding = 30;  // for chart edges
 
+var press_opacity = []
+
 // Create scale functions
 // For now, let axes scale themselves.
 var xScale = d3.scale.linear()  // xScale is width of graphic
@@ -122,7 +124,27 @@ d3.json('scatter_test.json', function(json) {
         // .attr("y", yScale(0))
 
     console.log("Circles created");
-    
+
+    // var color = d3.scale.category10();
+    // var legend = svg.selectAll(".legend")
+    //     .data(dataset)
+    //     .enter().append("g")
+    //     .classed("legend", true)
+    //     .attr("transform", function(d, i) {
+    //         // console.log(d);
+    //         return "translate(0," + i * 20 + ")";
+    //     });
+    // legend.append("rect")
+    //     .data(dataset,function(d) { 
+    //         return d.key})
+    //     .attr("x", canvas_width - 10)
+    //     .attr("width", 12)
+    //     .attr("height", 12)
+    //     .style("fill",function(d) { 
+    //         console.log(d);
+    //         return d.value});
+    // console.log(canvas_width);
+
     legend = svg.append("g")
         .attr("class","legend")
         .attr("transform","translate(" + canvas_width*1.1+ "," + canvas_height*0.1 + ")")
@@ -134,20 +156,20 @@ d3.json('scatter_test.json', function(json) {
         .attr("transform", "translate(0," + (canvas_height - padding) +")")
         .call(xAxis);
 
-    svg.selectAll('text')
-        .on('click',function (type) {
+    // svg.selectAll('text')
+    //     .on('click',function (type) {
 
-            d3.selectAll(".dot")
-                .filter(function(d){
-                    console.log(type.key)
-                    console.log(d['color'][current_position])
-                    // console.log(d.key == type.key);
-                    return d['color'][current_position] == type.key;
-                })
-                .style("opacity", 0.1)
-            // console.log(type);
-            // console.log(d3.selectAll(".dot").attr("data-legend"));
-        });
+    //         d3.selectAll(".dot")
+    //             .filter(function(d){
+    //                 console.log(type.key)
+    //                 console.log(d['color'][current_position])
+    //                 // console.log(d.key == type.key);
+    //                 return d['color'][current_position] == type.key;
+    //             })
+    //             .style("opacity", 0.1)
+    //         // console.log(type);
+    //         // console.log(d3.selectAll(".dot").attr("data-legend"));
+    //     });
 
 
 
@@ -174,6 +196,94 @@ d3.json('scatter_test.json', function(json) {
     var maxY = yScale.range()[0]
 
     var lastStep = null
+
+    svg.selectAll(".legend-circle")
+        .on('click',function (type) {
+            
+            console.log(press_opacity);
+
+            var index = press_opacity.indexOf(type.key)
+            if (index < 0){
+                press_opacity.push(type.key);
+                
+                // console.log(type.key);
+                d3.select(this)
+                    .style("opacity", 0.1);
+                d3.selectAll(".dot")
+                    .filter(function(d){
+                        // console.log(press_opacity);
+                        return d.color[current_position] == type.key;
+                    })
+                    .style("opacity", 0.1);
+                d3.selectAll(".legend-text")
+                    .filter(function(d){
+                        // console.log(d.key == type.key);
+                        return d.key == type.key;
+                    })
+                    .style("opacity", 0.1)
+                
+            }
+            else{
+                d3.select(this)
+                    .style("opacity", 0.7);
+                d3.selectAll(".dot")
+                    .filter(function(d){
+                        console.log(d.color[current_position] == type.key);
+                        return d.color[current_position] == type.key;
+                    })
+                    .style("opacity", 0.7);
+                d3.selectAll(".legend-text")
+                    .filter(function(d){
+                        return d.key == type.key;
+                    })
+                    .style("opacity", 0.7)
+                press_opacity.splice(index, 1);
+            }
+        });
+
+        svg.selectAll(".legend-text")
+        .on('click',function (type) {
+            
+            console.log(press_opacity);
+
+            var index = press_opacity.indexOf(type.key)
+            if (index < 0){
+                press_opacity.push(type.key);
+                
+                // console.log(type.key);
+                d3.select(this)
+                    .style("opacity", 0.1);
+                d3.selectAll(".dot")
+                    .filter(function(d){
+                        // console.log(press_opacity);
+                        return d.color[current_position] == type.key;
+                    })
+                    .style("opacity", 0.1);
+                d3.selectAll(".legend-circle")
+                    .filter(function(d){
+                        // console.log(d.key == type.key);
+                        return d.key == type.key;
+                    })
+                    .style("opacity", 0.1)
+                
+            }
+            else{
+                d3.select(this)
+                    .style("opacity", 0.7);
+                d3.selectAll(".dot")
+                    .filter(function(d){
+                        // console.log(press_opacity);
+                        return d.color[current_position] == type.key;
+                    })
+                    .style("opacity", 0.7);
+                d3.selectAll(".legend-circle")
+                    .filter(function(d){
+                        return d.key == type.key;
+                    })
+                    .style("opacity", 0.7)
+                press_opacity.splice(index, 1);
+            }
+        });
 
     // Interaction
     // svg.on('mousemove', function(){
@@ -232,6 +342,11 @@ d3.json('scatter_test.json', function(json) {
                 // console.log(d.color[step]);
                 return d.color[step];
             })
+            // .filter(function(d){
+            //     // console.log(d.key == type.key);
+            //     return d.key == type.key;
+            // })
+            // .style("opacity",0.1)
 
 
         // stepText.text(getStepLabel(step))
@@ -275,6 +390,9 @@ d3.json('scatter_test.json', function(json) {
     }
     playmoremonth = async function(last)
     {
+        d3.selectAll(".dot")
+        .style("opacity", 0.7);
+
         transition_time = 1000;
         pos = []
         i = current_position;
@@ -290,7 +408,7 @@ d3.json('scatter_test.json', function(json) {
                 pos.push(i)
             }
         }
-        console.log(pos);
+        // console.log(pos);
         console.log(last, current_position);
 
         
@@ -302,12 +420,24 @@ d3.json('scatter_test.json', function(json) {
 
                 setTimeout(function(){
                     transition_time = 1000;
-                console.log(i);
+                // console.log(i);
                 drawStep(i);
                 }, 1000+offset);
                 offset+=1000
             });
         
+        d3.selectAll(".dot")
+            .filter(function(d){
+                // console.log(press_opacity);
+                if(press_opacity.indexOf(d.color[last])==-1){
+                    // console.log('Hello')
+                    return false;
+                }
+                else{
+                    return true;
+                }
+            })
+            .style("opacity", 0.1);
         // console.log(pos);
         // // console.log(start, last);
         // function myLoop () {
